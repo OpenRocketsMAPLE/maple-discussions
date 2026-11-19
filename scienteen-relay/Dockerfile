@@ -7,6 +7,8 @@ RUN for n in 00 01 02 03 04 05 06; do \
  && cat /tmp/source.part*.b64 > /tmp/source.tar.gz.b64 \
  && base64 -d /tmp/source.tar.gz.b64 > /tmp/source.tar.gz \
  && tar -xzf /tmp/source.tar.gz -C /app \
+ && sed -i 's/const guildCommand = <T extends SlashCommandBuilder>(command: T) => command/const guildCommand = (command: any) => command/' src/commands.ts \
+ && sed -i 's/registerCommands(token, clientId, guildId);/registerCommands(token, clientId, guildId!);/' src/register.ts \
  && npm ci --no-audit --no-fund \
  && npm run build
 
