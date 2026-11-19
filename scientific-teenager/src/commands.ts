@@ -21,6 +21,7 @@ export const scienceCommand = new SlashCommandBuilder()
 export const relayCommand = new SlashCommandBuilder()
   .setName("relay")
   .setDescription("OpenRockets HQ controls for The Scientific Teenager")
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
   .addSubcommand(sc =>
     sc.setName("setup")
       .setDescription("Configure a public destination channel")
@@ -64,27 +65,14 @@ export const submitMessageCommand = new ContextMenuCommandBuilder()
   .setIntegrationTypes(ApplicationIntegrationType.GuildInstall);
 
 export const partnerCommandPayload = [scienceCommand.toJSON()];
-export const hqCommandPayload = [scienceCommand.toJSON(), relayCommand.toJSON(), submitMessageCommand.toJSON()];
-
-function guildPayload(payload: Record<string, any>[]) {
-  return payload.map(command => {
-    const { contexts: _contexts, integration_types: _integrationTypes, ...guildCommand } = command;
-    return guildCommand;
-  });
-}
+export const hqCommandPayload = [relayCommand.toJSON(), submitMessageCommand.toJSON()];
+export const globalCommandPayload = [scienceCommand.toJSON(), relayCommand.toJSON(), submitMessageCommand.toJSON()];
 
 export async function registerCommands(token: string, clientId: string, hqGuildId: string) {
   requireSnowflake(clientId, "DISCORD_CLIENT_ID");
   requireSnowflake(hqGuildId, "HQ_GUILD_ID");
   if (!token.trim()) throw new Error("DISCORD_TOKEN is required");
   const rest = new REST({ version: "10" }).setToken(token);
-  await rest.put(Routes.applicationCommands(clientId), { body: partnerCommandPayload });
-  let hq = 0;
-  try {
-    await rest.put(Routes.applicationGuildCommands(clientId, hqGuildId), { body: guildPayload(hqCommandPayload) });
-    hq = hqCommandPayload.length;
-  } catch (error) {
-    console.error("HQ command registration failed; global /science remains registered.", error);
-  }
-  return { global: partnerCommandPayload.length, hq };
+  await rest.put(Routes.applicationCommands(clientId), { body: globalCommandPayload });
+  return { global: globalCommandPayload.length, hq: hqCommandPayload.length };
 }
