@@ -11,16 +11,14 @@ import {
 } from "discord.js";
 import { requireSnowflake } from "./discord-config.js";
 
-const guildCommand = <T extends SlashCommandBuilder>(command: T) => command
+export const scienceCommand = new SlashCommandBuilder()
+  .setName("science")
+  .setDescription("Enable Scientific Teenager announcements in this channel")
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
   .setContexts(InteractionContextType.Guild)
   .setIntegrationTypes(ApplicationIntegrationType.GuildInstall);
 
-export const scienceCommand = guildCommand(new SlashCommandBuilder()
-  .setName("science")
-  .setDescription("Enable Scientific Teenager announcements in this channel")
-  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild));
-
-export const relayCommand = guildCommand(new SlashCommandBuilder()
+export const relayCommand = new SlashCommandBuilder()
   .setName("relay")
   .setDescription("OpenRockets HQ controls for The Scientific Teenager")
   .addSubcommand(sc =>
@@ -54,7 +52,9 @@ export const relayCommand = guildCommand(new SlashCommandBuilder()
       .setDescription("Cancel a pending HQ proposal")
       .addIntegerOption(o => o.setName("proposal_id").setDescription("Proposal ID").setRequired(true).setMinValue(1))
   )
-  .addSubcommand(sc => sc.setName("network").setDescription("Show HQ network totals")));
+  .addSubcommand(sc => sc.setName("network").setDescription("Show HQ network totals"))
+  .setContexts(InteractionContextType.Guild)
+  .setIntegrationTypes(ApplicationIntegrationType.GuildInstall);
 
 export const submitMessageCommandName = "Submit to Scientific Teenager";
 export const submitMessageCommand = new ContextMenuCommandBuilder()
