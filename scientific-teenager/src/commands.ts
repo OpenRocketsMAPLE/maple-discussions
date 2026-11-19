@@ -64,7 +64,7 @@ export const submitMessageCommand = new ContextMenuCommandBuilder()
   .setIntegrationTypes(ApplicationIntegrationType.GuildInstall);
 
 export const partnerCommandPayload = [scienceCommand.toJSON()];
-export const hqCommandPayload = [relayCommand.toJSON(), submitMessageCommand.toJSON()];
+export const hqCommandPayload = [scienceCommand.toJSON(), relayCommand.toJSON(), submitMessageCommand.toJSON()];
 
 function guildPayload(payload: Record<string, any>[]) {
   return payload.map(command => {
@@ -84,7 +84,7 @@ export async function registerCommands(token: string, clientId: string, hqGuildI
     await rest.put(Routes.applicationGuildCommands(clientId, hqGuildId), { body: guildPayload(hqCommandPayload) });
     hq = hqCommandPayload.length;
   } catch (error) {
-    console.error("HQ command registration failed; global /science remains registered.");
+    console.error("HQ command registration failed; global /science remains registered.", error);
   }
   return { global: partnerCommandPayload.length, hq };
 }
