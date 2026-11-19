@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - scientific-teenager/**
       - .github/workflows/scienteen-relay-image.yml
   schedule:
     - cron: "17 */12 * * *"
@@ -17,18 +18,16 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out bot deployment branch
+      - name: Check out canonical GitHub source
         uses: actions/checkout@v4
-        with:
-          ref: deploy/scienteen-relay-v1.0.2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and publish image
+      - name: Build and publish image from GitHub
         run: |
           docker buildx build \
             --platform linux/amd64 \
             --tag ttl.sh/openrockets-scienteen-relay-1571890811552014356-auto-setup:24h \
             --push \
-            ./scienteen-relay
+            ./scientific-teenager
