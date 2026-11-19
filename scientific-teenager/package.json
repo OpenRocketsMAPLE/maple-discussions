@@ -1,0 +1,33 @@
+{
+  "name": "the-scientific-teenager-relay",
+  "version": "1.0.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "register": "node dist/register.js",
+    "install-url": "node dist/install-url.js",
+    "check": "node dist/check.js",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:integration": "bash scripts/test-integration.sh"
+  },
+  "dependencies": {
+    "discord.js": "14.28.1",
+    "dotenv": "16.6.1",
+    "express": "5.3.0",
+    "pg": "8.23.1"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.6",
+    "@types/node": "22.20.5",
+    "@types/pg": "8.23.1",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
