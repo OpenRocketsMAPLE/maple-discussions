@@ -79,6 +79,12 @@ export async function registerCommands(token: string, clientId: string, hqGuildI
   if (!token.trim()) throw new Error("DISCORD_TOKEN is required");
   const rest = new REST({ version: "10" }).setToken(token);
   await rest.put(Routes.applicationCommands(clientId), { body: partnerCommandPayload });
-  await rest.put(Routes.applicationGuildCommands(clientId, hqGuildId), { body: guildPayload(hqCommandPayload) });
-  return { global: partnerCommandPayload.length, hq: hqCommandPayload.length };
+  let hq = 0;
+  try {
+    await rest.put(Routes.applicationGuildCommands(clientId, hqGuildId), { body: guildPayload(hqCommandPayload) });
+    hq = hqCommandPayload.length;
+  } catch (error) {
+    console.error("HQ command registration failed; global /science remains registered.");
+  }
+  return { global: partnerCommandPayload.length, hq };
 }
