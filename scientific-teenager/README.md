@@ -14,3 +14,5 @@ Current behavior:
 - OpenRockets HQ proposal/review controls stay separate from partner-server setup.
 
 Railway should use this directory as the service root and should not use environment-variable source bundles or startup patch scripts.
+
+Deployment source: GitHub.
